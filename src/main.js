@@ -5,39 +5,58 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import SimpleLightbox from "simplelightbox";
 
 import { fetchImages } from './js/pixabay-api.js';
+import { renderImages } from './js/render-functions.js';
 
 const form = document.querySelector('#search-form');
 const input = form.querySelector('input[name="searchQuery"]');
 const gallery = document.querySelector('.gallery');
-const btn = document.querySelector('.search-btn');
+const loader = document.querySelector('#loader');
 
-form.addEventListener('submit', async event => {
+const lightbox = new SimpleLightbox('.gallery a', {
+    captions: true,
+    captionsData: 'title',
+    captionType: 'attr', 
+    captionSelector: 'self',
+    captionDelay: 250, 
+});
+
+function toggleLoader(show) {
+    if (show) {
+        loader.classList.remove('hidden');
+    } else {
+        loader.classList.add('hidden');
+    }
+}
+
+form.addEventListener('submit', event => {
     event.preventDefault();
 
     const query = input.value.trim();
+    gallery.innerHTML = '';
 
-    if(!query) return;
+    if (!query) return;
 
-    try {
-        const data = await fetchImages(query);
+    toggleLoader(true);
 
-        if(data.hits.length === 0) {
-            iziToast.error({
-                message: 'Sorry, there are no images matching your search query. Please try again!',
-                position: 'topRight',
-            });
-            return;
-        }
+    fetchImages(query)
+        .then(data => {
+            toggleLoader(false);
 
-        console.log(data.hits);
-    } 
+            if (!data.hits || data.hits.length === 0) {
+                iziToast.error({
+                    message: 'Sorry, there are no images matching your search query. Please try again!',
+                    position: 'topRight',
+                });
+                return;
+            }
 
-    catch(error) {
-        iziToast.error({
-                message: 'Sorry, there are no images matching your search query. Please try again!',
-                position: 'topRight',
+            const markup = renderImages(data.hits);
+            gallery.insertAdjacentHTML('beforeend', markup);
+
+            lightbox.refresh();
+        })
+        .catch(error => {
+            toggleLoader(false);
+            console.error(error);
         });
-    }
 });
-
-

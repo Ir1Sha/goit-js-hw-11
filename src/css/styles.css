@@ -1,9 +1,3 @@
-/**
-  |============================
-  | include css partials with
-  | default @import url()
-  |============================
-*/
 /* Common styles */
 @import url('./reset.css');
 
@@ -18,7 +12,6 @@ body {
   justify-content: flex-start;
   min-height: 100vh;
 }
-
 
 .search-section {
   display: flex;
@@ -57,8 +50,20 @@ body {
   background-color: #2563eb;
 }
 
+.loader {
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.hidden {
+  display: none;
+}
+
 
 .gallery-section {
+  padding-top: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,11 +74,50 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
-  max-width: 800px;
+  max-width: 1600px;
 }
 
+.photo-card {
+  width: calc(20% - 10px); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
 
+.gallery-image {
+  width: 100%;
+  height: 200px; 
+  object-fit: cover; 
+}
 
+.sl-caption {
+  font-size: 16px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+}
 
+.info {
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.info p {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+
+.info-item {
+  flex: 1;
+  text-align: center;
+  padding: 0 5px;
+}
